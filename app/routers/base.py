@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from fastapi import Depends, HTTPException
 
-from typing import Optional
+from typing import List, Optional
 
 from app.view_models.base import Item
 from app.view_models.base import ModelName
@@ -22,6 +22,8 @@ def get_db():
 
 baseRouter = APIRouter()
 
+# all CRUD operation of API
+# just read req and call the function corresponding to the controller
 #################################################################
 # create base
 @baseRouter.post('/base/db/create_base', response_model=VMBaseTableModel)
@@ -31,6 +33,25 @@ def create_base(base: VMBaseTableCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="name already exited")
     return Cbase.create_base(db, base)
 
+# get lists of Basetable
+@baseRouter.get('/base/db/get_all_bases', response_model=List[VMBaseTableModel])
+def get_all_bases(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    db_bases = Cbase.get_bases(db, skip=skip, limit=limit)
+    return db_bases
+
+
+# get base by id
+@baseRouter.get('/base/db/get_base_by_id', response_model=VMBaseTableModel)
+def get_base_by_id(base_id: int, db: Session = Depends(get_db)):
+    db_base = Cbase.get_base_by_id(db, base_id=base_id)
+    if db_base is None:
+        raise HTTPException(status_code=404, detail="base_id not found ")
+    return db_base
+###################################################################
+
+
+
+# Test how to get request params
 ###################################################################
 @baseRouter.get('/base')
 async def base():

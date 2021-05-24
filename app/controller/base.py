@@ -3,6 +3,9 @@ from sqlalchemy.orm import Session
 from app.models.base import BaseTable as MBaseTable
 from app.view_models.base import BaseTableCreate as VMBaseTableCreate
 
+
+# all CRUD operation of Basetable
+# it will be called by routers
 def get_base_by_id(db: Session, base_id: int):
     return db.query(MBaseTable)\
             .filter(MBaseTable.id == base_id)\
