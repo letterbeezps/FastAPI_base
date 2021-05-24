@@ -3,11 +3,11 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 # config
-SQLALCHEMY_DB_URL = 'sqlite:///app/data/base.db'
+SQLALCHEMY_DB_URL = 'sqlite:///app/data/base.db?check_same_thread=False'
 MYSQL_DB_URL = ''
 
 Base = declarative_base()
-engin = create_engine(SQLALCHEMY_DB_URL)
+engin = create_engine(SQLALCHEMY_DB_URL, echo=True)
 Session = sessionmaker(bind=engin)
 
 # model to dict
